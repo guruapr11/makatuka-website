@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MakaTuka – Stories That Spark Little Imaginations</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --navy:   #1A1A3E;
+    --deep:   #0D2B6B;
+    --mint:   #4ECBA0;
+    --yellow: #FFD966;
+    --peach:  #FFAA80;
+    --cream:  #FFF8EE;
+    --sage:   #7BC67A;
+    --lav:    #C4B5FD;
+    --sky:    #2D6EC0;
+  }
+
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--cream);
+    color: var(--navy);
+    overflow-x: hidden;
+  }
+
+  /* ── CURSOR ── */
+  body { cursor: none; }
+  #cursor {
+    width: 18px; height: 18px;
+    background: var(--yellow);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform .15s ease, background .2s;
+    mix-blend-mode: multiply;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 48px;
+    background: rgba(26,26,62,.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(78,203,160,.2);
+  }
+  .nav-logo {
+    font-family: 'Baloo 2', cursive;
+    font-size: 1.8rem; font-weight: 800;
+    color: var(--yellow);
+    letter-spacing: -1px;
+  }
+  .nav-logo span { color: var(--mint); }
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700; font-size: .95rem;
+    color: rgba(255,255,255,.8);
+    text-decoration: none;
+    transition: color .2s;
+  }
+  .nav-links a:hover { color: var(--mint); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    background: linear-gradient(160deg, var(--navy) 0%, var(--deep) 55%, #0a3a4a 100%);
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+    padding-top: 80px;
+  }
+
+  /* Stars */
+  .stars { position: absolute; inset: 0; pointer-events: none; }
+  .star {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    animation: twinkle var(--dur, 3s) ease-in-out infinite;
+    animation-delay: var(--del, 0s);
+  }
+  @keyframes twinkle {
+    0%,100% { opacity: .2; transform: scale(1); }
+    50%      { opacity: 1;  transform: scale(1.4); }
+  }
+
+  /* Floating shapes */
+  .floater {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: .18;
+    animation: float var(--ft, 8s) ease-in-out infinite alternate;
+  }
+  @keyframes float {
+    from { transform: translateY(0) scale(1); }
+    to   { transform: translateY(-30px) scale(1.05); }
+  }
+
+  .hero-content {
+    text-align: center;
+    position: relative; z-index: 2;
+    padding: 0 24px;
+    animation: fadeUp .9s ease both;
+  }
+  @keyframes fadeUp {
+    from { opacity:0; transform: translateY(40px); }
+    to   { opacity:1; transform: translateY(0); }
+  }
+
+  .hero-badge {
+    display: inline-block;
+    background: rgba(78,203,160,.15);
+    border: 1px solid var(--mint);
+    color: var(--mint);
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700; font-size: .85rem;
+    letter-spacing: 2px; text-transform: uppercase;
+    padding: 6px 18px; border-radius: 999px;
+    margin-bottom: 28px;
+    animation: fadeUp .9s .1s ease both;
+  }
+
+  .hero h1 {
+    font-family: 'Baloo 2', cursive;
+    font-size: clamp(3rem, 9vw, 7rem);
+    font-weight: 800;
+    line-height: 1.0;
+    color: white;
+    animation: fadeUp .9s .2s ease both;
+  }
+  .hero h1 .pop { color: var(--yellow); display: inline-block; animation: wobble 2.5s ease-in-out infinite; }
+  @keyframes wobble {
+    0%,100% { transform: rotate(-2deg); }
+    50%      { transform: rotate(2deg); }
+  }
+
+  .hero-sub {
+    font-size: clamp(1rem, 2.5vw, 1.3rem);
+    color: rgba(255,255,255,.7);
+    max-width: 540px; margin: 22px auto 40px;
+    line-height: 1.7;
+    animation: fadeUp .9s .35s ease both;
+  }
+
+  .hero-btns {
+    display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
+    animation: fadeUp .9s .5s ease both;
+  }
+  .btn {
+    font-family: 'Baloo 2', cursive;
+    font-weight: 700; font-size: 1.05rem;
+    padding: 14px 34px; border-radius: 999px;
+    text-decoration: none;
+    transition: transform .2s, box-shadow .2s;
+    display: inline-block;
+  }
+  .btn:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(0,0,0,.3); }
+  .btn-primary { background: var(--yellow); color: var(--navy); }
+  .btn-secondary { background: transparent; border: 2px solid var(--mint); color: var(--mint); }
+
+  /* Dino illustration */
+  .hero-dino {
+    position: absolute; bottom: 0; right: 5%;
+    width: min(320px, 35vw);
+    animation: dinoFloat 4s ease-in-out infinite alternate;
+  }
+  @keyframes dinoFloat {
+    from { transform: translateY(0); }
+    to   { transform: translateY(-18px); }
+  }
+
+  /* wavy divider */
+  .wave {
+    display: block; width: 100%;
+    overflow: hidden; line-height: 0;
+  }
+  .wave svg { display: block; width: 100%; }
+
+  /* ── SECTION BASE ── */
+  section { padding: 90px 48px; }
+  .section-label {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700; font-size: .8rem;
+    letter-spacing: 3px; text-transform: uppercase;
+    color: var(--mint); margin-bottom: 12px;
+  }
+  .section-title {
+    font-family: 'Baloo 2', cursive;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 800; line-height: 1.15;
+    color: var(--navy);
+  }
+  .section-title span { color: var(--sky); }
+
+  /* ── ABOUT ── */
+  .about { background: white; }
+  .about-inner {
+    max-width: 1100px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center;
+  }
+  .about-text p {
+    font-size: 1.1rem; line-height: 1.8;
+    color: #444; margin-top: 18px;
+  }
+  .about-pills { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+  .pill {
+    background: var(--cream);
+    border: 2px solid var(--mint);
+    border-radius: 999px;
+    padding: 6px 18px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700; font-size: .9rem;
+    color: var(--navy);
+  }
+  .about-visual {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+  }
+  .about-card {
+    background: var(--cream);
+    border-radius: 20px; padding: 28px 20px;
+    text-align: center;
+    border: 2px solid transparent;
+    transition: border-color .3s, transform .3s;
+  }
+  .about-card:hover { border-color: var(--mint); transform: translateY(-4px); }
+  .about-card .icon { font-size: 2.4rem; margin-bottom: 10px; }
+  .about-card h4 { font-family: 'Baloo 2', cursive; font-weight: 700; font-size: 1rem; color: var(--navy); }
+  .about-card:nth-child(2) { margin-top: 28px; }
+  .about-card:nth-child(4) { margin-top: -28px; }
+
+  /* ── BOOKS ── */
+  .books { background: var(--cream); }
+  .books-inner { max-width: 1100px; margin: 0 auto; }
+  .books-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 28px; margin-top: 48px;
+  }
+  .book-card {
+    border-radius: 24px; overflow: hidden;
+    box-shadow: 0 6px 28px rgba(0,0,0,.08);
+    transition: transform .3s, box-shadow .3s;
+    background: white;
+  }
+  .book-card:hover { transform: translateY(-8px) rotate(1deg); box-shadow: 0 18px 40px rgba(0,0,0,.13); }
+  .book-cover {
+    height: 230px; display: flex; align-items: center; justify-content: center;
+    font-size: 5rem; position: relative; overflow: hidden;
+  }
+  .book-cover::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(to bottom, transparent 60%, rgba(0,0,0,.25));
+  }
+  .book-info { padding: 18px 20px; }
+  .book-info h3 { font-family: 'Baloo 2', cursive; font-weight: 700; font-size: 1.1rem; }
+  .book-info p { font-size: .88rem; color: #666; margin-top: 4px; }
+  .book-tag {
+    display: inline-block; margin-top: 10px;
+    background: var(--cream); border-radius: 999px;
+    padding: 3px 12px; font-size: .78rem;
+    font-weight: 700; color: var(--sky);
+  }
+
+  /* ── WHERE TO FIND ── */
+  .platforms { background: var(--navy); padding: 90px 48px; }
+  .platforms-inner { max-width: 1100px; margin: 0 auto; text-align: center; }
+  .platforms .section-label { justify-content: center; display: flex; }
+  .platforms .section-title { color: white; }
+  .platforms .section-title span { color: var(--yellow); }
+  .platforms-sub {
+    color: rgba(255,255,255,.65); font-size: 1.05rem;
+    max-width: 500px; margin: 16px auto 56px; line-height: 1.7;
+  }
+
+  .platform-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+  }
+  .platform-card {
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 20px; padding: 36px 20px;
+    text-align: center;
+    transition: background .3s, border-color .3s, transform .3s;
+    position: relative; overflow: hidden;
+  }
+  .platform-card::before {
+    content: '';
+    position: absolute; top: -40%; left: -40%;
+    width: 180%; height: 180%;
+    background: radial-gradient(circle, rgba(78,203,160,.08), transparent 65%);
+    opacity: 0; transition: opacity .4s;
+  }
+  .platform-card:hover { background: rgba(255,255,255,.1); border-color: var(--mint); transform: translateY(-5px); }
+  .platform-card:hover::before { opacity: 1; }
+  .platform-icon { font-size: 2.6rem; margin-bottom: 14px; }
+  .platform-name {
+    font-family: 'Baloo 2', cursive;
+    font-weight: 700; font-size: 1.1rem; color: white;
+  }
+  .platform-desc { font-size: .85rem; color: rgba(255,255,255,.5); margin-top: 6px; line-height: 1.5; }
+  .platform-badge {
+    display: inline-block; margin-top: 14px;
+    background: rgba(255,217,102,.15);
+    border: 1px solid var(--yellow);
+    color: var(--yellow);
+    font-size: .75rem; font-weight: 700;
+    padding: 3px 12px; border-radius: 999px;
+    letter-spacing: 1px;
+  }
+  .platform-badge.live {
+    background: rgba(78,203,160,.15);
+    border-color: var(--mint);
+    color: var(--mint);
+  }
+
+  /* ── WHY ── */
+  .why { background: white; }
+  .why-inner { max-width: 1100px; margin: 0 auto; }
+  .why-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-top: 48px; }
+  .why-card {
+    padding: 36px 28px; border-radius: 24px;
+    border: 2px solid var(--cream);
+    position: relative; overflow: hidden;
+    transition: border-color .3s, transform .3s;
+  }
+  .why-card::before {
+    content: ''; position: absolute;
+    width: 120px; height: 120px; border-radius: 50%;
+    top: -40px; right: -30px;
+    opacity: .15;
+  }
+  .why-card:nth-child(1)::before { background: var(--mint); }
+  .why-card:nth-child(2)::before { background: var(--yellow); }
+  .why-card:nth-child(3)::before { background: var(--peach); }
+  .why-card:hover { border-color: var(--mint); transform: translateY(-5px); }
+  .why-icon { font-size: 2.6rem; margin-bottom: 16px; }
+  .why-card h3 { font-family: 'Baloo 2', cursive; font-weight: 700; font-size: 1.25rem; color: var(--navy); }
+  .why-card p { font-size: .95rem; color: #555; margin-top: 10px; line-height: 1.7; }
+
+  /* ── NEWSLETTER ── */
+  .newsletter {
+    background: linear-gradient(135deg, #0D2B6B 0%, #1A1A3E 100%);
+    padding: 90px 48px; text-align: center;
+  }
+  .newsletter h2 {
+    font-family: 'Baloo 2', cursive;
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 800; color: white;
+  }
+  .newsletter h2 span { color: var(--yellow); }
+  .newsletter p { color: rgba(255,255,255,.65); font-size: 1rem; margin: 14px 0 36px; }
+  .nl-form {
+    display: flex; gap: 12px; justify-content: center;
+    flex-wrap: wrap; max-width: 480px; margin: 0 auto;
+  }
+  .nl-form input {
+    flex: 1; min-width: 200px;
+    padding: 14px 22px; border-radius: 999px;
+    border: 2px solid rgba(255,255,255,.15);
+    background: rgba(255,255,255,.08);
+    color: white; font-family: 'Nunito', sans-serif;
+    font-size: 1rem; outline: none;
+    transition: border-color .2s;
+  }
+  .nl-form input::placeholder { color: rgba(255,255,255,.4); }
+  .nl-form input:focus { border-color: var(--mint); }
+  .nl-form button {
+    padding: 14px 30px; border-radius: 999px;
+    background: var(--mint); color: var(--navy);
+    font-family: 'Baloo 2', cursive; font-weight: 700;
+    font-size: 1rem; border: none;
+    cursor: pointer; transition: transform .2s, box-shadow .2s;
+  }
+  .nl-form button:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(78,203,160,.4); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #0a0f2e; color: rgba(255,255,255,.5);
+    padding: 40px 48px; text-align: center;
+    font-size: .9rem;
+  }
+  footer .footer-logo {
+    font-family: 'Baloo 2', cursive;
+    font-size: 1.5rem; font-weight: 800;
+    color: var(--yellow); margin-bottom: 12px;
+  }
+  footer .footer-logo span { color: var(--mint); }
+  .footer-links { display: flex; gap: 24px; justify-content: center; margin: 16px 0; flex-wrap: wrap; }
+  .footer-links a { color: rgba(255,255,255,.5); text-decoration: none; transition: color .2s; }
+  .footer-links a:hover { color: var(--mint); }
+  .social-row { display: flex; gap: 14px; justify-content: center; margin: 18px 0; }
+  .social-btn {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: rgba(255,255,255,.07);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; text-decoration: none;
+    transition: background .2s, transform .2s;
+  }
+  .social-btn:hover { background: var(--mint); transform: translateY(-3px); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    nav { padding: 14px 24px; }
+    .nav-links { display: none; }
+    section, .platforms, .newsletter, footer { padding: 60px 24px; }
+    .about-inner { grid-template-columns: 1fr; gap: 40px; }
+    .why-grid { grid-template-columns: 1fr; }
+    .hero-dino { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div id="cursor"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Maka<span>Tuka</span></div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#books">Books</a></li>
+    <li><a href="#platforms">Where to Buy</a></li>
+    <li><a href="#newsletter">Free Story</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="stars" id="stars"></div>
+
+  <div class="floater" style="width:400px;height:400px;background:#4ECBA0;top:-100px;left:-100px;--ft:9s"></div>
+  <div class="floater" style="width:300px;height:300px;background:#FFD966;bottom:0;right:200px;--ft:7s"></div>
+  <div class="floater" style="width:200px;height:200px;background:#FFAA80;top:40%;right:-60px;--ft:11s"></div>
+
+  <div class="hero-content">
+    <div class="hero-badge">✦ Kids Books & eBooks</div>
+    <h1>Stories that spark<br><span class="pop">little imaginations</span> 🌙</h1>
+    <p class="hero-sub">MakaTuka brings magical picture books, eBooks & stories to curious kids everywhere. Every page is a new adventure!</p>
+    <div class="hero-btns">
+      <a href="#books" class="btn btn-primary">Explore Stories 📚</a>
+      <a href="#platforms" class="btn btn-secondary">Where to Buy →</a>
+    </div>
+  </div>
+
+  <!-- SVG Dino -->
+  <svg class="hero-dino" viewBox="0 0 300 340" xmlns="http://www.w3.org/2000/svg">
+    <!-- Body -->
+    <ellipse cx="140" cy="210" rx="90" ry="60" fill="#4ECBA0"/>
+    <!-- Head -->
+    <ellipse cx="215" cy="175" rx="58" ry="50" fill="#4ECBA0"/>
+    <!-- Snout -->
+    <ellipse cx="248" cy="185" rx="32" ry="20" fill="#3DB88A"/>
+    <!-- Eye -->
+    <circle cx="222" cy="162" r="12" fill="white"/>
+    <circle cx="225" cy="162" r="6" fill="#1A1A3E"/>
+    <circle cx="228" cy="159" r="2.5" fill="white"/>
+    <!-- Nostril -->
+    <circle cx="257" cy="180" r="3" fill="#2A9A72"/>
+    <!-- Spikes -->
+    <polygon points="90,155 105,155 97,130" fill="#FFAA80"/>
+    <polygon points="112,148 127,148 119,120" fill="#FFAA80"/>
+    <polygon points="134,145 149,145 141,116" fill="#FFAA80"/>
+    <polygon points="155,148 170,148 162,120" fill="#FFAA80"/>
+    <!-- Tail -->
+    <ellipse cx="62" cy="208" rx="45" ry="22" fill="#4ECBA0"/>
+    <ellipse cx="28" cy="202" rx="22" ry="14" fill="#3DB88A"/>
+    <!-- Legs -->
+    <ellipse cx="115" cy="268" rx="22" ry="14" fill="#3DB88A"/>
+    <ellipse cx="165" cy="268" rx="22" ry="14" fill="#3DB88A"/>
+    <!-- Smile -->
+    <path d="M230 192 Q240 200 255 192" stroke="#1A1A3E" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <!-- Stars around -->
+    <text x="260" y="120" font-size="22" fill="#FFD966" opacity=".9">✦</text>
+    <text x="60" y="140" font-size="14" fill="#C4B5FD" opacity=".8">✦</text>
+    <text x="280" y="230" font-size="12" fill="#FFAA80" opacity=".7">✦</text>
+    <!-- Leaf -->
+    <ellipse cx="100" cy="300" rx="70" ry="22" fill="#2E7D32"/>
+    <ellipse cx="100" cy="295" rx="70" ry="22" fill="#388E3C" opacity=".6"/>
+  </svg>
+</section>
+
+<!-- Wave divider -->
+<div class="wave">
+  <svg viewBox="0 0 1440 60" preserveAspectRatio="none" height="60">
+    <path d="M0,30 C360,60 1080,0 1440,30 L1440,60 L0,60 Z" fill="#ffffff"/>
+  </svg>
+</div>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="about-inner">
+    <div class="about-text">
+      <div class="section-label">Our Story</div>
+      <h2 class="section-title">Books kids actually <span>want</span> to read</h2>
+      <p>MakaTuka was born from a simple belief — every child deserves stories that feel like magic. Stories with heart, colour, and characters they'll never forget.</p>
+      <p>From bedtime adventures to curious little explorers, our books are crafted to delight children aged 2–9 and give parents a reason to smile too.</p>
+      <div class="about-pills">
+        <span class="pill">📖 Picture Books</span>
+        <span class="pill">📱 eBooks</span>
+        <span class="pill">🌏 Indian Stories</span>
+        <span class="pill">🎨 Rich Illustrations</span>
+      </div>
+    </div>
+    <div class="about-visual">
+      <div class="about-card">
+        <div class="icon">🦕</div>
+        <h4>Fun Characters</h4>
+      </div>
+      <div class="about-card">
+        <div class="icon">🌙</div>
+        <h4>Bedtime Stories</h4>
+      </div>
+      <div class="about-card">
+        <div class="icon">🌿</div>
+        <h4>Nature & World</h4>
+      </div>
+      <div class="about-card">
+        <div class="icon">🎉</div>
+        <h4>Joyful Learning</h4>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BOOKS -->
+<section class="books" id="books">
+  <div class="books-inner">
+    <div class="section-label">Our Collection</div>
+    <h2 class="section-title">Meet our stories 🌟</h2>
+    <div class="books-grid">
+
+      <div class="book-card">
+        <div class="book-cover" style="background:linear-gradient(135deg,#1A1A3E,#0D2B6B)">🦖</div>
+        <div class="book-info">
+          <h3>Mako's Dino Series</h3>
+          <p>Follow tiny Rex on a big adventure — growing up, making friends, and discovering the world.</p>
+          <span class="book-tag">eBook · Digital & Printable</span>
+        </div>
+      </div>
+
+      <div class="book-card">
+        <div class="book-cover" style="background:linear-gradient(135deg,#388E3C,#1B5E20)">🌳</div>
+        <div class="book-info">
+          <h3>The Talking Tree</h3>
+          <p>What secrets does the old banyan tree hold?</p>
+          <span class="book-tag">Ages 4–8 · Coming Soon</span>
+        </div>
+      </div>
+
+      <div class="book-card">
+        <div class="book-cover" style="background:linear-gradient(135deg,#F57F17,#E65100)">🌅</div>
+        <div class="book-info">
+          <h3>Mia's Magic Morning</h3>
+          <p>Every sunrise brings a brand new adventure.</p>
+          <span class="book-tag">Ages 2–5 · Coming Soon</span>
+        </div>
+      </div>
+
+      <div class="book-card">
+        <div class="book-cover" style="background:linear-gradient(135deg,#1565C0,#0D47A1)">🌊</div>
+        <div class="book-info">
+          <h3>The Ocean Whisperer</h3>
+          <p>A little girl discovers the secret language of the sea.</p>
+          <span class="book-tag">Ages 5–9 · Coming Soon</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- PLATFORMS -->
+<section class="platforms" id="platforms">
+  <div class="platforms-inner">
+    <div class="section-label">Where to Find Us</div>
+    <h2 class="section-title">Get your books on your <span>favourite platform</span></h2>
+    <p class="platforms-sub">MakaTuka stories are available — or coming soon — to your favourite reading platforms and stores.</p>
+
+    <div class="platform-grid">
+
+      <div class="platform-card">
+        <div class="platform-icon">📦</div>
+        <div class="platform-name">Amazon KDP</div>
+        <div class="platform-desc">Available for Kindle and print-on-demand worldwide.</div>
+        <span class="platform-badge live">🟢 Available</span>
+      </div>
+
+      <div class="platform-card">
+        <div class="platform-icon">🌐</div>
+        <div class="platform-name">Our Website</div>
+        <div class="platform-desc">Download PDF eBooks directly from makatuka.com.</div>
+        <span class="platform-badge live">🟢 Available</span>
+      </div>
+
+      <div class="platform-card">
+        <div class="platform-icon">🛒</div>
+        <div class="platform-name">Gumroad</div>
+        <div class="platform-desc">Instant digital downloads for all our eBooks.</div>
+        <span class="platform-badge">⏳ Coming Soon</span>
+      </div>
+
+      <div class="platform-card">
+        <div class="platform-icon">📱</div>
+        <div class="platform-name">Google Play Books</div>
+        <div class="platform-desc">Read on any Android device or browser.</div>
+        <span class="platform-badge">⏳ Coming Soon</span>
+      </div>
+
+      <div class="platform-card">
+        <div class="platform-icon">🎨</div>
+        <div class="platform-name">Etsy</div>
+        <div class="platform-desc">Printable story packs and activity sheets.</div>
+        <span class="platform-badge">⏳ Coming Soon</span>
+      </div>
+
+      <div class="platform-card">
+        <div class="platform-icon">📚</div>
+        <div class="platform-name">Pothi.com</div>
+        <div class="platform-desc">India-based print-on-demand for physical books.</div>
+        <span class="platform-badge">⏳ Coming Soon</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- WHY MAKATUKA -->
+<section class="why" id="why">
+  <div class="why-inner">
+    <div class="section-label">Why MakaTuka</div>
+    <h2 class="section-title">Made with love, <span>for little ones</span></h2>
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="why-icon">🎨</div>
+        <h3>Richly Illustrated</h3>
+        <p>Every page is a visual treat — vibrant, warm, and full of detail that kids love to explore over and over again.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🌍</div>
+        <h3>Rooted in Culture</h3>
+        <p>Stories that feel familiar and fresh — drawing from Indian settings, nature, and everyday childhood moments.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">💛</div>
+        <h3>Parent Approved</h3>
+        <p>No screens needed! Our eBooks and print books are crafted for shared reading time that parents enjoy too.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SUCCESS POPUP -->
+<div id="popup-overlay" style="
+  display:none; position:fixed; inset:0; z-index:9998;
+  background:rgba(10,15,40,0.75); backdrop-filter:blur(6px);
+  align-items:center; justify-content:center;
+">
+  <div id="popup-box" style="
+    background:#fff; border-radius:28px; padding:48px 40px;
+    max-width:420px; width:90%; text-align:center;
+    box-shadow:0 24px 80px rgba(0,0,0,0.35);
+    animation: popIn .4s cubic-bezier(.34,1.56,.64,1) both;
+  ">
+    <div style="font-size:3.5rem; margin-bottom:16px;">🦖📬</div>
+    <h3 style="font-family:'Baloo 2',cursive; font-size:1.8rem; color:#1A1A3E; margin-bottom:12px;">
+      You're all set!
+    </h3>
+    <p style="font-family:'Nunito',sans-serif; color:#555; font-size:1rem; line-height:1.7; margin-bottom:28px;">
+      Thanks for joining the MakaTuka family! 🎉<br>
+      You'll receive your <strong>free Mako's Dino Series eBook</strong> shortly. Keep an eye on your inbox!
+    </p>
+    <button onclick="closePopup()" style="
+      font-family:'Baloo 2',cursive; font-weight:700; font-size:1rem;
+      background:#FFD966; color:#1A1A3E; border:none;
+      padding:12px 32px; border-radius:999px; cursor:pointer;
+      transition:transform .2s;
+    " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+      Can't wait! 🌟
+    </button>
+  </div>
+</div>
+
+<!-- NEWSLETTER -->
+<section class="newsletter" id="newsletter">
+  <h2>Get a <span>FREE story</span> 🎁</h2>
+  <p>Join the MakaTuka family and get the first book in <strong>Mako's Dino Series</strong> delivered straight to your inbox — absolutely free!</p>
+  <div class="nl-form">
+    <input type="email" id="nl-email" placeholder="your@email.com"/>
+    <button type="button" onclick="handleSignup()">Send Me the Story ✦</button>
+  </div>
+  <div id="nl-error" style="color:#FFAA80; font-size:.9rem; margin-top:10px; display:none;">
+    Please enter a valid email address 💌
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Maka<span>Tuka</span></div>
+  <div class="footer-links">
+    <a href="#about">About</a>
+    <a href="#books">Books</a>
+    <a href="#platforms">Buy</a>
+    <a href="https://instagram.com/the_og_makatuka" target="_blank">Instagram</a>
+    <a href="mailto:hello@makatuka.com">Contact</a>
+  </div>
+  <div class="social-row">
+    <a class="social-btn" href="https://facebook.com/makatuka" target="_blank" title="Facebook">📘</a>
+    <a class="social-btn" href="https://instagram.com/the_og_makatuka" target="_blank" title="Instagram">📸</a>
+    <a class="social-btn" href="mailto:hello@makatuka.com" title="Email">✉️</a>
+  </div>
+  <p>© 2025 MakaTuka · Stories that spark little imaginations ✦</p>
+</footer>
+
+<script>
+  // Popup animation
+  const styleEl = document.createElement('style');
+  styleEl.textContent = `
+    @keyframes popIn {
+      from { opacity:0; transform:scale(.8) translateY(20px); }
+      to   { opacity:1; transform:scale(1) translateY(0); }
+    }
+  `;
+  document.head.appendChild(styleEl);
+
+  // Google Sheets integration
+  const SHEET_URL = 'https://script.google.com/macros/s/AKfycbzuP3kiSJNNceshjSg23ksK8hlp7D2QF0uLv2cfvaXhJUfdY2CAD7ZmzZWxFIIPIv4E/exec';
+
+  window.handleSignup = async function() {
+    const input = document.getElementById('nl-email');
+    const error = document.getElementById('nl-error');
+    const btn   = document.querySelector('.nl-form button');
+    const email = input.value.trim();
+    const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+    if (!valid) {
+      error.style.display = 'block';
+      input.style.border = '2px solid #FFAA80';
+      return;
+    }
+
+    error.style.display = 'none';
+    input.style.border = '';
+
+    // Show loading state
+    btn.textContent = 'Sending... ⏳';
+    btn.disabled = true;
+
+    try {
+      await fetch(SHEET_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+    } catch (err) {
+      console.warn('Sheet write failed:', err);
+    }
+
+    // Show success popup regardless (no-cors won't return readable response)
+    input.value = '';
+    btn.textContent = 'Send Me the Story ✦';
+    btn.disabled = false;
+    document.getElementById('popup-overlay').style.display = 'flex';
+  };
+
+  window.closePopup = function() {
+    document.getElementById('popup-overlay').style.display = 'none';
+  };
+
+  // Close popup on overlay click
+  document.getElementById('popup-overlay').addEventListener('click', function(e) {
+    if (e.target === this) closePopup();
+  });
+
+  // Close on Escape key
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closePopup(); });
+
+
+  const cursor = document.getElementById('cursor');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX - 9 + 'px';
+    cursor.style.top  = e.clientY - 9 + 'px';
+  });
+  document.querySelectorAll('a, button, .book-card, .platform-card').forEach(el => {
+    el.addEventListener('mouseenter', () => { cursor.style.transform = 'scale(2.2)'; cursor.style.background = '#4ECBA0'; });
+    el.addEventListener('mouseleave', () => { cursor.style.transform = 'scale(1)';   cursor.style.background = '#FFD966'; });
+  });
+
+  // Generate stars
+  const starsEl = document.getElementById('stars');
+  for (let i = 0; i < 80; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    const sz = Math.random() * 3 + 1;
+    s.style.cssText = `
+      width:${sz}px; height:${sz}px;
+      top:${Math.random()*100}%; left:${Math.random()*100}%;
+      --dur:${2+Math.random()*4}s; --del:${Math.random()*4}s;
+    `;
+    starsEl.appendChild(s);
+  }
+
+  // Scroll reveal
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.book-card, .platform-card, .why-card, .about-card').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(30px)';
+    el.style.transition = 'opacity .6s ease, transform .6s ease';
+    observer.observe(el);
+  });
+</script>
+
+</body>
+</html>
